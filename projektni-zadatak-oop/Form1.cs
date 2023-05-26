@@ -1,3 +1,7 @@
+using Microsoft.VisualBasic.ApplicationServices;
+using System;
+using System.Media;
+
 namespace projektni_zadatak_oop
 {
     public partial class Form1 : Form
@@ -32,7 +36,7 @@ namespace projektni_zadatak_oop
 
         private void tBackgroundStart_Tick(object sender, EventArgs e)
         {            
-            tBackgroundAnim.Enabled = true;
+            tBackgroundAnim.Enabled = true;           
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -62,29 +66,31 @@ namespace projektni_zadatak_oop
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < 175; ++i)
+            for (int i = 0; i < 90; ++i)
             {
                 if (r.Next(0, 5) == 0)
                 {
-                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.White));
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 200, ClientRectangle.Height), 2, Color.White));
                 }
                 if (r.Next(0, 5) == 1)
                 {
-                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.Red));
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 200, ClientRectangle.Height), 2, Color.Red));
                 }
                 if (r.Next(0, 5) == 2)
                 {
-                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.Green));
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 200, ClientRectangle.Height), 2, Color.Green));
                 }
                 if (r.Next(0, 5) == 3)
                 {
-                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.Blue));
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 200, ClientRectangle.Height), 2, Color.Blue));
                 }
                 if (r.Next(0, 5) == 4)
                 {
-                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.Yellow));
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 200, ClientRectangle.Height), 2, Color.Yellow));
                 }
             }
+            SoundPlayer soundPlayer = new SoundPlayer("C:\\Users\\ck3jo\\Documents\\GitHub\\projektni-zadatak-oop\\projektni-zadatak-oop\\jingle.wav");
+            soundPlayer.Play();
         }
     }
 
