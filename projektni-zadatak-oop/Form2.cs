@@ -28,7 +28,8 @@ namespace projektni_zadatak_oop
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
+            Character player = new Character(ClientRectangle.Width / 2, ClientRectangle.Height - 50);
+            player.Draw();
         }
 
         private void Form2_KeyPress(object sender, KeyPressEventArgs e)
@@ -40,11 +41,23 @@ namespace projektni_zadatak_oop
     public class Character
     {
         int x, y;
-        public Character() { }
+        public Character(int x, int y) 
+        {
+            this.x = x;
+            this.y = y;
+        }
     
         public void Move(int dx, int dy)
         {
 
+        }
+
+        public void Draw()
+        {
+            PictureBox pbPlayer = new PictureBox();
+            pbPlayer.Location = new Point(x, y);
+            pbPlayer.Image = Image.FromFile("C:\\Users\\ck3jo\\Documents\\GitHub\\projektni-zadatak-oop\\projektni-zadatak-oop\\player.jpg");
+            pbPlayer.Show();
         }
     }
 
