@@ -1,6 +1,3 @@
-using System.Net.Quic;
-using System.Security;
-
 namespace projektni_zadatak_oop
 {
     public partial class Form1 : Form
@@ -37,27 +34,28 @@ namespace projektni_zadatak_oop
         {            
             for (int i = 0; i < 175; ++i)
             {
-                switch (r.Next(0, 5))
+                if (r.Next(0, 5) == 0)
                 {
-                    case 0:
-                        bg.Add(new Particle(r.Next(0, ClientRectangle.Width), 0, 10, Color.White));
-                        break;
-                    case 1:
-                        bg.Add(new Particle(r.Next(0, ClientRectangle.Width), 0, 10, Color.Red));
-                        break;
-                    case 2:
-                        bg.Add(new Particle(r.Next(0, ClientRectangle.Width), 0, 10, Color.Green));
-                        break;
-                    case 3:
-                        bg.Add(new Particle(r.Next(0, ClientRectangle.Width), 0, 10, Color.Yellow));
-                        break;
-                    case 4:
-                        bg.Add(new Particle(r.Next(0, ClientRectangle.Width), 0, 10, Color.Blue));
-                        break;
-                    default:
-                        break;
+                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.White));
                 }
-            }           
+                if (r.Next(0, 5) == 1)
+                {
+                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.Red));
+                }
+                if (r.Next(0, 5) == 2)
+                {
+                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.Green));
+                }
+                if (r.Next(0, 5) == 3)
+                {
+                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.Blue));
+                }
+                if (r.Next(0, 5) == 4)
+                {
+                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.Yellow));
+                }
+            }
+
             tBackgroundAnim.Enabled = true;
             tBackgroundStart.Enabled = false;
         }
@@ -73,18 +71,15 @@ namespace projektni_zadatak_oop
             
             foreach (Particle part in bg.listOfParticles)
             {
-                switch (r.Next(0, 2))
+                if (r.Next(0, 2) == 0)
                 {
-                    case 0:
-                        if (part.y > ClientRectangle.Height) { part.Set(part.x, 0, 10); }
-                        part.Move(r.Next(5, 20), r.Next(5, 20));
-                        break;
-                    case 1:
-                        if (part.y > ClientRectangle.Height) { part.Set(part.x, 0, 10); }
-                        part.Move(r.Next(5, 20) * (-1), r.Next(5, 20));
-                        break;
-                    default:
-                        break;
+                    if (part.y > ClientRectangle.Height) { part.Set(part.x, 20, part.size); }
+                    part.Move(r.Next(10, 20), r.Next(10, 20));
+                }
+                else
+                {
+                    if (part.y > ClientRectangle.Height) { part.Set(part.x, 0, part.size); }
+                    part.Move(r.Next(10, 20) * (-1), r.Next(10, 20));
                 }
             }
         }
@@ -114,8 +109,8 @@ namespace projektni_zadatak_oop
 
         public void Move(int dx, int dy)
         {
-            this.x += dx;
-            this.y += dy;
+            this.x -= dx;
+            this.y -= dy;
         }
 
         public void Set(int x, int y, int size) 
@@ -127,7 +122,9 @@ namespace projektni_zadatak_oop
 
         public void Draw(Graphics g)
         {
+            Pen pen = new Pen(color);
             SolidBrush brush = new SolidBrush(color);
+            g.DrawRectangle(pen, x, y, size, size);
             g.FillRectangle(brush, x, y, size, size);
         }
     }
