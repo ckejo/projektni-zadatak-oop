@@ -48,12 +48,14 @@
             // pbLogo
             // 
             this.pbLogo.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.pbLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pbLogo.ImageLocation = "C:\\Users\\ck3jo\\Documents\\GitHub\\projektni-zadatak-oop\\projektni-zadatak-oop\\logo." +
     "png";
             this.pbLogo.Location = new System.Drawing.Point(12, 12);
             this.pbLogo.Name = "pbLogo";
-            this.pbLogo.Size = new System.Drawing.Size(67, 59);
-            this.pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbLogo.Size = new System.Drawing.Size(791, 779);
+            this.pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbLogo.TabIndex = 0;
             this.pbLogo.TabStop = false;
             this.pbLogo.Visible = false;
@@ -97,7 +99,8 @@
             // 
             // tBackgroundAnim
             // 
-            this.tBackgroundAnim.Interval = 20;
+            this.tBackgroundAnim.Enabled = true;
+            this.tBackgroundAnim.Interval = 75;
             this.tBackgroundAnim.Tick += new System.EventHandler(this.tBackgroundAnim_Tick);
             // 
             // Form1
@@ -112,6 +115,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Galaxigan";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).EndInit();
             this.ResumeLayout(false);

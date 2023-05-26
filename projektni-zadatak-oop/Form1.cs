@@ -32,32 +32,7 @@ namespace projektni_zadatak_oop
 
         private void tBackgroundStart_Tick(object sender, EventArgs e)
         {            
-            for (int i = 0; i < 175; ++i)
-            {
-                if (r.Next(0, 5) == 0)
-                {
-                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.White));
-                }
-                if (r.Next(0, 5) == 1)
-                {
-                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.Red));
-                }
-                if (r.Next(0, 5) == 2)
-                {
-                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.Green));
-                }
-                if (r.Next(0, 5) == 3)
-                {
-                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.Blue));
-                }
-                if (r.Next(0, 5) == 4)
-                {
-                    bg.listOfParticles.Add(new Particle(r.Next(20, ClientRectangle.Width - 20), 0, 10, Color.Yellow));
-                }
-            }
-
             tBackgroundAnim.Enabled = true;
-            tBackgroundStart.Enabled = false;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -67,19 +42,47 @@ namespace projektni_zadatak_oop
 
         private void tBackgroundAnim_Tick(object sender, EventArgs e)
         {
+            tBackgroundStart.Enabled = false;
             Refresh();
             
             foreach (Particle part in bg.listOfParticles)
             {
                 if (r.Next(0, 2) == 0)
                 {
-                    if (part.y > ClientRectangle.Height) { part.Set(part.x, 20, part.size); }
+                    if (part.y > ClientRectangle.Height) { part.Set(part.x, ClientRectangle.Height, part.size); }
                     part.Move(r.Next(10, 20), r.Next(10, 20));
                 }
                 else
                 {
-                    if (part.y > ClientRectangle.Height) { part.Set(part.x, 0, part.size); }
+                    if (part.y > ClientRectangle.Height) { part.Set(part.x, ClientRectangle.Height, part.size); }
                     part.Move(r.Next(10, 20) * (-1), r.Next(10, 20));
+                }
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 175; ++i)
+            {
+                if (r.Next(0, 5) == 0)
+                {
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.White));
+                }
+                if (r.Next(0, 5) == 1)
+                {
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.Red));
+                }
+                if (r.Next(0, 5) == 2)
+                {
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.Green));
+                }
+                if (r.Next(0, 5) == 3)
+                {
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.Blue));
+                }
+                if (r.Next(0, 5) == 4)
+                {
+                    bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 50, ClientRectangle.Height), 2, Color.Yellow));
                 }
             }
         }
@@ -91,7 +94,7 @@ namespace projektni_zadatak_oop
 
         public Background() { listOfParticles = new List<Particle>(); }
 
-        public void Add(Particle particle) { listOfParticles.Add(particle); }
+        public void AddParticle(Particle particle) { listOfParticles.Add(particle); }
     }
     
     public class Particle
