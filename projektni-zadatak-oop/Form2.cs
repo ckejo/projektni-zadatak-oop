@@ -20,8 +20,12 @@ namespace projektni_zadatak_oop
         }
 
         Character player;
+        List<Particle> backgroundParticles;
+        Random r = new Random();
         List<Projectile> listOfProjectiles;
+        List<Enemy> listOfEnemies;
         int startingStrength = 1;
+        int startingLives = 3;
 
         private void Form2_KeyDown(object sender, KeyEventArgs e)
         {
@@ -79,26 +83,68 @@ namespace projektni_zadatak_oop
                     p.Draw(g);
                 }
             }
-
-            if (e.KeyCode == Keys.E)
-            {
-                if (startingStrength + 1 > 3) { }
-                else ++startingStrength; 
-            }
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            player = new Character(ClientRectangle.Width / 2 - 5, ClientRectangle.Height - 50);
+            player = new Character(ClientRectangle.Width / 2 - 10, ClientRectangle.Height - 50);
+            backgroundParticles = new List<Particle>();
             listOfProjectiles = new List<Projectile>();
+            listOfEnemies = new List<Enemy>();
+
+            for (int i = 0; i < 95; ++i)
+            {
+                switch (r.Next(0, 6))
+                {
+                    case 0:
+                        backgroundParticles.Add(new Particle(r.Next(0, ClientRectangle.Width), r.Next(0, ClientRectangle.Height), 2, Color.White));
+                        break;
+                    case 1:
+                        backgroundParticles.Add(new Particle(r.Next(0, ClientRectangle.Width), r.Next(0, ClientRectangle.Height), 2, Color.Blue));
+                        break;
+                    case 2:
+                        backgroundParticles.Add(new Particle(r.Next(0, ClientRectangle.Width), r.Next(0, ClientRectangle.Height), 2, Color.Green));
+                        break;
+                    case 3:
+                        backgroundParticles.Add(new Particle(r.Next(0, ClientRectangle.Width), r.Next(0, ClientRectangle.Height), 2, Color.Yellow));
+                        break;
+                    case 4:
+                        backgroundParticles.Add(new Particle(r.Next(0, ClientRectangle.Width), r.Next(0, ClientRectangle.Height), 2, Color.Aqua));
+                        break;
+                    case 5:
+                        backgroundParticles.Add(new Particle(r.Next(0, ClientRectangle.Width), r.Next(0, ClientRectangle.Height), 2, Color.Orange));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            for (int i = 0; i < 8; ++i)
+            {
+                for (int j = 0; j < 12; ++j)
+                {
+                    listOfEnemies.Add(new EasyEnemy(200 + 25 * j, 125 + 30 * i));
+                }
+            }
         }
 
         private void Form2_Paint(object sender, PaintEventArgs e)
         {
             player.Draw(e.Graphics);
+            
+            foreach (Particle part in backgroundParticles)
+            {
+                part.Draw(e.Graphics);
+            }
+
             foreach (Projectile p in listOfProjectiles)
             {
                 p.Draw(e.Graphics);
+            }
+
+            foreach (Enemy enemy in listOfEnemies)
+            {
+                enemy.Draw(e.Graphics);
             }
         }
 
@@ -115,6 +161,22 @@ namespace projektni_zadatak_oop
                 {
                     listOfProjectiles[i].Move(0, 20);
                 }
+            }
+        }
+
+        private void tEnemyMover_Tick(object sender, EventArgs e)
+        {
+            Refresh();
+            switch (r.Next(0, 2))
+            {
+                case 0:
+                    foreach (Enemy enemy in listOfEnemies) { enemy.Move(15, 0); }
+                    break;
+                case 1:
+                    foreach (Enemy enemy in listOfEnemies) { enemy.Move(-15, 0); }
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -140,9 +202,54 @@ namespace projektni_zadatak_oop
         public void Draw(Graphics g)
         {
             SolidBrush rBrush = new SolidBrush(Color.Red);
-            SolidBrush bBrush = new SolidBrush(Color.Blue);
+            SolidBrush bBrush = new SolidBrush(Color.LightBlue);
+            Point[] listOfPoints = new Point[] 
+            { 
+                new Point(x + 2, y - 13),
+                new Point(x + 2, y),
+                new Point(x + 6, y),
+                new Point(x + 6, y - 1),
+                new Point(x + 7, y - 1),
+                new Point(x + 7, y - 2),
+                new Point(x + 8, y - 2),
+                new Point(x + 8, y - 3),
+                new Point(x + 12, y - 3),
+                new Point(x + 12, y - 2),
+                new Point(x + 13, y - 2),
+                new Point(x + 13, y - 1),
+                new Point(x + 14, y - 1),
+                new Point(x + 14, y),
+                new Point(x + 18, y),
+                new Point(x + 18, y - 13),
+                new Point(x + 16, y - 13),
+                new Point(x + 16, y - 12),
+                new Point(x + 15, y - 12),
+                new Point(x + 15, y - 11),
+                new Point(x + 13, y - 11),
+                new Point(x + 13, y - 17),
+                new Point(x + 11, y - 17),
+                new Point(x + 11, y - 18),
+                new Point(x + 9, y - 18),
+                new Point(x + 9, y - 17),
+                new Point(x + 7, y - 17),
+                new Point(x + 7, y - 11),
+                new Point(x + 5, y - 11),
+                new Point(x + 5, y - 12),
+                new Point(x + 4, y - 12),
+                new Point(x + 4, y - 13),
+            };
 
-            g.FillRectangle(rBrush, x, y, 10, 10);
+            Point[] listOfPointsCockpit = new Point[] 
+            {
+                new Point(x + 8, y - 9),
+                new Point(x + 12, y - 9),
+                new Point(x + 12, y - 5),
+                new Point(x + 8, y - 5)
+            };
+
+
+            g.FillPolygon(rBrush, listOfPoints);
+            g.FillPolygon(bBrush, listOfPointsCockpit);
         }
     }
 
@@ -202,6 +309,78 @@ namespace projektni_zadatak_oop
 
     public abstract class Enemy
     {
-        int x, y;
+        public int x { get; set; }
+        public int y { get; set; } 
+        public int health { get; set; }
+
+        public Enemy(int x, int y, int health)
+        {
+            this.x = x;
+            this.y = y;
+            this.health = 1;
+        }
+
+        public abstract void Move(int dx, int dy);
+
+        public abstract void Draw(Graphics g);
+    }
+
+    public class EasyEnemy : Enemy
+    {
+        public EasyEnemy(int x, int y, int health = 1) : base(x, y, health) { }
+
+        public override void Move(int dx, int dy)
+        {
+            x -= dx;
+            y -= dy;
+        }
+
+        public override void Draw(Graphics g) 
+        {
+            SolidBrush yBrush = new SolidBrush(Color.Yellow);
+            SolidBrush rBrush = new SolidBrush(Color.Red);
+            Point[] listOfPoints = new Point[]
+            {
+                new Point(x + 2, y - 4),
+                new Point(x + 2, y - 11),
+                new Point(x + 3, y - 11),
+                new Point(x + 3, y - 12),
+                new Point(x + 5, y - 12),
+                new Point(x + 5, y - 20),
+                new Point(x + 7, y - 20),
+                new Point(x + 7, y - 17),
+                new Point(x + 8, y - 17),
+                new Point(x + 8, y - 14),
+                new Point(x + 9, y - 14),
+                new Point(x + 9, y - 13),
+                new Point(x + 11, y - 13),
+                new Point(x + 11, y - 14),
+                new Point(x + 12, y - 14),
+                new Point(x + 12, y - 17),
+                new Point(x + 13, y - 17),
+                new Point(x + 13, y - 20),
+                new Point(x + 15, y - 20),
+                new Point(x + 15, y - 12),
+                new Point(x + 17, y - 12),
+                new Point(x + 17, y - 11),
+                new Point(x + 18, y - 11),
+                new Point(x + 18, y - 4),
+                new Point(x + 17, y - 4),
+                new Point(x + 17, y - 3),
+                new Point(x + 3, y - 3),
+                new Point(x + 3, y - 4)
+            };
+
+            Point[] listOfPointsCockpit = new Point[]
+            {
+                new Point(x + 4, y - 5),
+                new Point(x + 16, y - 5),
+                new Point(x + 16, y - 9),
+                new Point(x + 4, y - 9)
+            };
+
+            g.FillPolygon(yBrush, listOfPoints);
+            g.FillPolygon(rBrush, listOfPointsCockpit);
+        }
     }
 }

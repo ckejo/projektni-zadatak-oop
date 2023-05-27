@@ -112,6 +112,7 @@
             this.Controls.Add(this.bExit);
             this.Controls.Add(this.bStart);
             this.Controls.Add(this.pbLogo);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Galaxigan";
