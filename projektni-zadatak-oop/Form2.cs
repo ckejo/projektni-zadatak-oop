@@ -19,11 +19,16 @@ namespace projektni_zadatak_oop
             InitializeComponent();
         }
 
+        Random r = new Random();
+
         Character player;
         List<Particle> backgroundParticles;
-        Random r = new Random();
         List<Projectile> listOfProjectiles;
         List<Enemy> listOfEnemies;
+
+        SoundPlayer projectileSound = new SoundPlayer("C:\\Users\\ck3jo\\Documents\\GitHub\\projektni-zadatak-oop\\projektni-zadatak-oop\\projectile.wav");
+        SoundPlayer explosion = new SoundPlayer("C:\\Users\\ck3jo\\Documents\\GitHub\\projektni-zadatak-oop\\projektni-zadatak-oop\\explosion.wav");
+        
         int startingStrength = 1;
         int startingLives = 3;
 
@@ -75,7 +80,8 @@ namespace projektni_zadatak_oop
         {          
             if (e.KeyCode == Keys.Space || e.KeyCode == Keys.Z)
             {
-                listOfProjectiles.Add(new Projectile(player.x + 5, player.y, startingStrength));
+                listOfProjectiles.Add(new Projectile(player.x + 10, player.y - 20, startingStrength));
+                projectileSound.Play();
                 Graphics g = CreateGraphics();
                 tProjectileMover.Enabled = true;
                 foreach (Projectile p in listOfProjectiles)
@@ -151,22 +157,38 @@ namespace projektni_zadatak_oop
         private void tProjectileMover_Tick(object sender, EventArgs e)
         {
             Refresh();
-            for (int i = 0; i < listOfProjectiles.Count; ++i)
+
+            int eLim = listOfEnemies.Count;
+            int pLim = listOfProjectiles.Count;
+            int numOfEnemiesRemoved = 0;
+            int numOfProjectilesRemoved = 0;
+
+            for (int i = 0; i < pLim; ++i)
             {
-                if (listOfProjectiles[i].y < 0)
-                {
-                    listOfProjectiles.RemoveAt(i);
+                if (listOfProjectiles[i - numOfProjectilesRemoved].y < 0) 
+                { 
+                    listOfProjectiles.RemoveAt(i - numOfProjectilesRemoved);
                 }
-                else
+
+                for (int j = 0; j < eLim; ++j)
                 {
-                    listOfProjectiles[i].Move(0, 20);
+                    if (listOfEnemies[j - numOfEnemiesRemoved].x - 20 >= listOfProjectiles[i - numOfProjectilesRemoved].x && listOfEnemies[j - numOfEnemiesRemoved].y - 20 == listOfProjectiles[i - numOfProjectilesRemoved].y)
+                    {
+                        listOfEnemies.RemoveAt(j - numOfEnemiesRemoved);
+                        listOfProjectiles.RemoveAt(i - numOfProjectilesRemoved);
+                        ++numOfEnemiesRemoved;
+                        ++numOfProjectilesRemoved;
+                    }
                 }
+
+                listOfProjectiles[i].Move(0, 20);
             }
         }
 
         private void tEnemyMover_Tick(object sender, EventArgs e)
         {
             Refresh();
+
             switch (r.Next(0, 2))
             {
                 case 0:

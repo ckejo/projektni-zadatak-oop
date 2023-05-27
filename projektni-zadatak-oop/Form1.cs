@@ -14,6 +14,7 @@ namespace projektni_zadatak_oop
         Background bg = new Background();
         Random r = new Random();
         SoundPlayer soundPlayer;
+
         private void tLogoShow_Tick(object sender, EventArgs e)
         {
             pbLogo.Visible = true;
