@@ -13,7 +13,7 @@ namespace projektni_zadatak_oop
 
         Background bg = new Background();
         Random r = new Random();
-
+        SoundPlayer soundPlayer;
         private void tLogoShow_Tick(object sender, EventArgs e)
         {
             pbLogo.Visible = true;
@@ -24,6 +24,7 @@ namespace projektni_zadatak_oop
 
         private void bStart_Click(object sender, EventArgs e)
         {
+            soundPlayer.Stop();
             var f = new Form2();
             f.Show();
             this.Hide();         
@@ -89,7 +90,8 @@ namespace projektni_zadatak_oop
                     bg.AddParticle(new Particle(r.Next(20, ClientRectangle.Width - 20), r.Next(ClientRectangle.Height - 200, ClientRectangle.Height), 2, Color.Yellow));
                 }
             }
-            SoundPlayer soundPlayer = new SoundPlayer("C:\\Users\\ck3jo\\Documents\\GitHub\\projektni-zadatak-oop\\projektni-zadatak-oop\\jingle.wav");
+            
+            soundPlayer = new SoundPlayer("C:\\Users\\ck3jo\\Documents\\GitHub\\projektni-zadatak-oop\\projektni-zadatak-oop\\jingle.wav");
             soundPlayer.Play();
         }
     }
