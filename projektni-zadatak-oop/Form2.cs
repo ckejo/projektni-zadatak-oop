@@ -20,8 +20,8 @@ namespace projektni_zadatak_oop
         }
 
         Character player;
-        Projectile playerProjectile;
-        bool projectileExists = false;
+        List<Projectile> listOfProjectiles;
+        int startingStrength = 1;
 
         private void Form2_KeyDown(object sender, KeyEventArgs e)
         {
@@ -34,7 +34,7 @@ namespace projektni_zadatak_oop
                     player.Move(-5, 0);
                 }
             }
-            
+
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
             {
                 if (player.x + 2 > ClientRectangle.Width) { }
@@ -44,7 +44,7 @@ namespace projektni_zadatak_oop
                     player.Move(5, 0);
                 }
             }
-            
+
             if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
             {
                 if (player.y + 2 > ClientRectangle.Height) { }
@@ -54,7 +54,7 @@ namespace projektni_zadatak_oop
                     player.Move(0, -5);
                 }
             }
-            
+
             if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
             {
                 if (player.y - 2 < 0) { }
@@ -65,38 +65,57 @@ namespace projektni_zadatak_oop
                 }
             }
 
+        }
+
+        private void Form2_KeyUp(object sender, KeyEventArgs e)
+        {          
             if (e.KeyCode == Keys.Space || e.KeyCode == Keys.Z)
             {
-                playerProjectile.Set(player.x + 5, player.y, playerProjectile.strength);
+                listOfProjectiles.Add(new Projectile(player.x + 5, player.y, startingStrength));
                 Graphics g = CreateGraphics();
-                projectileExists = true;
                 tProjectileMover.Enabled = true;
-                playerProjectile.Draw(g);
+                foreach (Projectile p in listOfProjectiles)
+                {
+                    p.Draw(g);
+                }
+            }
+
+            if (e.KeyCode == Keys.E)
+            {
+                if (startingStrength + 1 > 3) { }
+                else ++startingStrength; 
             }
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
             player = new Character(ClientRectangle.Width / 2 - 5, ClientRectangle.Height - 50);
-            playerProjectile = new Projectile(player.x + 5, player.y, 2);
+            listOfProjectiles = new List<Projectile>();
         }
 
         private void Form2_Paint(object sender, PaintEventArgs e)
         {
-            if (projectileExists) playerProjectile.Draw(e.Graphics);
-            player.Draw(e.Graphics);         
+            player.Draw(e.Graphics);
+            foreach (Projectile p in listOfProjectiles)
+            {
+                p.Draw(e.Graphics);
+            }
         }
 
         private void tProjectileMover_Tick(object sender, EventArgs e)
         {
-            if (playerProjectile.y < 0)
-            {
-                projectileExists = false;
-                tProjectileMover.Enabled = false;
-            }
-
             Refresh();
-            playerProjectile.Move(0, 20);
+            for (int i = 0; i < listOfProjectiles.Count; ++i)
+            {
+                if (listOfProjectiles[i].y < 0)
+                {
+                    listOfProjectiles.RemoveAt(i);
+                }
+                else
+                {
+                    listOfProjectiles[i].Move(0, 20);
+                }
+            }
         }
     }
 

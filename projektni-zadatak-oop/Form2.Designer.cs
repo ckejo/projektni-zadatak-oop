@@ -47,6 +47,7 @@
             this.Text = "Galaxigan";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form2_Paint);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form2_KeyUp);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form2_KeyDown);
             this.ResumeLayout(false);
 
