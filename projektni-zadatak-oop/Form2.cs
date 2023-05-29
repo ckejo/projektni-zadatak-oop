@@ -31,22 +31,13 @@ namespace projektni_zadatak_oop
         
         int startingStrength = 1;
         int startingLives = 3;
+        int score = 0;
 
         private void Form2_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
             {
-                if (player.x - 2 < 0) { }
-                else
-                {
-                    Refresh();
-                    player.Move(-5, 0);
-                }
-            }
-
-            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
-            {
-                if (player.x + 2 > ClientRectangle.Width) { }
+                if (player.x - 25 < 0) { }
                 else
                 {
                     Refresh();
@@ -54,19 +45,19 @@ namespace projektni_zadatak_oop
                 }
             }
 
-            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
+            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
             {
-                if (player.y + 2 > ClientRectangle.Height) { }
+                if (player.x + 25 > ClientRectangle.Width) { }
                 else
                 {
                     Refresh();
-                    player.Move(0, -5);
+                    player.Move(-5, 0);
                 }
             }
 
-            if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
             {
-                if (player.y - 2 < 0) { }
+                if (player.y - 25 < 0) { }
                 else
                 {
                     Refresh();
@@ -74,6 +65,15 @@ namespace projektni_zadatak_oop
                 }
             }
 
+            if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
+            {
+                if (player.y + 25 > ClientRectangle.Height) { }
+                else
+                {
+                    Refresh();
+                    player.Move(0, -5);
+                }
+            }
         }
 
         private void Form2_KeyUp(object sender, KeyEventArgs e)
@@ -86,7 +86,7 @@ namespace projektni_zadatak_oop
                 tProjectileMover.Enabled = true;
                 foreach (Projectile p in listOfProjectiles)
                 {
-                    p.Draw(g);
+                    if (p.detectedHit != true) p.Draw(g);
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace projektni_zadatak_oop
             {
                 switch (r.Next(0, 6))
                 {
-                    case 0:
+                    case 0:                    
                         backgroundParticles.Add(new Particle(r.Next(0, ClientRectangle.Width), r.Next(0, ClientRectangle.Height), 2, Color.White));
                         break;
                     case 1:
@@ -135,53 +135,49 @@ namespace projektni_zadatak_oop
         }
 
         private void Form2_Paint(object sender, PaintEventArgs e)
-        {
-            player.Draw(e.Graphics);
+        {   
+            e.Graphics.Clear(Color.Black);
+
+            foreach (Particle part in backgroundParticles) part.Draw(e.Graphics);
+
+            foreach (Projectile p in listOfProjectiles) p.Draw(e.Graphics);
+
+            foreach (Enemy enemy in listOfEnemies) enemy.Draw(e.Graphics);
             
-            foreach (Particle part in backgroundParticles)
-            {
-                part.Draw(e.Graphics);
-            }
-
-            foreach (Projectile p in listOfProjectiles)
-            {
-                p.Draw(e.Graphics);
-            }
-
-            foreach (Enemy enemy in listOfEnemies)
-            {
-                enemy.Draw(e.Graphics);
-            }
+            player.Draw(e.Graphics);
         }
 
         private void tProjectileMover_Tick(object sender, EventArgs e)
         {
             Refresh();
 
-            int eLim = listOfEnemies.Count;
+            lbScore.Text = score.ToString();
             int pLim = listOfProjectiles.Count;
-            int numOfEnemiesRemoved = 0;
-            int numOfProjectilesRemoved = 0;
+            int eLim = listOfEnemies.Count;
+
+            for (int i = 0; i < pLim; ++i) 
+            { 
+                if (listOfProjectiles[i].y < 0) listOfProjectiles.RemoveAt(i);
+                pLim = listOfProjectiles.Count;
+            }
 
             for (int i = 0; i < pLim; ++i)
             {
-                if (listOfProjectiles[i - numOfProjectilesRemoved].y < 0) 
-                { 
-                    listOfProjectiles.RemoveAt(i - numOfProjectilesRemoved);
-                }
+                listOfProjectiles[i].Move(0, 50);
 
                 for (int j = 0; j < eLim; ++j)
                 {
-                    if (listOfEnemies[j - numOfEnemiesRemoved].x - 20 >= listOfProjectiles[i - numOfProjectilesRemoved].x && listOfEnemies[j - numOfEnemiesRemoved].y - 20 == listOfProjectiles[i - numOfProjectilesRemoved].y)
+                    if (listOfProjectiles[i].x >= listOfEnemies[j].x && listOfProjectiles[i].x <= listOfEnemies[j].x + 20 && listOfProjectiles[i].y - 40 == listOfEnemies[j].y + 20)
                     {
-                        listOfEnemies.RemoveAt(j - numOfEnemiesRemoved);
-                        listOfProjectiles.RemoveAt(i - numOfProjectilesRemoved);
-                        ++numOfEnemiesRemoved;
-                        ++numOfProjectilesRemoved;
+                        Graphics g = CreateGraphics();
+                        g.Clear(Color.Black);
+                        listOfProjectiles.RemoveAt(i);
+                        listOfEnemies.RemoveAt(j);
+                        pLim = listOfProjectiles.Count;
+                        eLim = listOfEnemies.Count;
+                        score += 100;
                     }
                 }
-
-                listOfProjectiles[i].Move(0, 20);
             }
         }
 
@@ -192,10 +188,10 @@ namespace projektni_zadatak_oop
             switch (r.Next(0, 2))
             {
                 case 0:
-                    foreach (Enemy enemy in listOfEnemies) { enemy.Move(15, 0); }
+                    foreach (Enemy enemy in listOfEnemies) enemy.Move(15, 0);
                     break;
                 case 1:
-                    foreach (Enemy enemy in listOfEnemies) { enemy.Move(-15, 0); }
+                    foreach (Enemy enemy in listOfEnemies) enemy.Move(-15, 0);
                     break;
                 default:
                     break;
@@ -206,8 +202,7 @@ namespace projektni_zadatak_oop
     public class Character
     {
         public int x { get; set; }
-        public int y { get; set; }
-       
+        public int y { get; set; }   
 
         public Character(int x, int y) 
         {
@@ -217,8 +212,8 @@ namespace projektni_zadatak_oop
     
         public void Move(int dx, int dy)
         {
-            this.x += dx;
-            this.y += dy;
+            this.x -= dx;
+            this.y -= dy;
         }
 
         public void Draw(Graphics g)
@@ -280,12 +275,14 @@ namespace projektni_zadatak_oop
         public int x { get; set; }
         public int y { get; set; }
         public int strength { get; set; }
+        public bool detectedHit { get; set; }
 
-        public Projectile(int x, int y, int strength)
+        public Projectile(int x, int y, int strength, bool detectedHit = false)
         {
             this.x = x;
             this.y = y;
             this.strength = strength;
+            this.detectedHit = detectedHit;
         }
 
         public void Set(int x, int y, int strength)
@@ -308,23 +305,26 @@ namespace projektni_zadatak_oop
 
         public void Draw(Graphics g)
         {
-            Pen yPen = new Pen(new SolidBrush(Color.Yellow), 2);
-            Pen gPen = new Pen(new SolidBrush(Color.Green), 2);
-            Pen pPen = new Pen(new SolidBrush(Color.Purple), 2);
-
-            switch (strength)
+            if (!detectedHit)
             {
-                case 1:
-                    g.DrawLine(yPen, new Point(x, y - 2), new Point(x, y - 30));
-                    break;
-                case 2:
-                    g.DrawLine(gPen, new Point(x, y - 2), new Point(x, y - 30));
-                    break;
-                case 3:
-                    g.DrawLine(pPen, new Point(x, y - 2), new Point(x, y - 30));
-                    break;
-                default:
-                    break;
+                Pen yPen = new Pen(new SolidBrush(Color.Yellow), 2);
+                Pen gPen = new Pen(new SolidBrush(Color.Green), 2);
+                Pen pPen = new Pen(new SolidBrush(Color.Purple), 2);
+
+                switch (strength)
+                {
+                    case 1:
+                        g.DrawLine(yPen, new Point(x, y - 2), new Point(x, y - 40));
+                        break;
+                    case 2:
+                        g.DrawLine(gPen, new Point(x, y - 2), new Point(x, y - 40));
+                        break;
+                    case 3:
+                        g.DrawLine(pPen, new Point(x, y - 2), new Point(x, y - 40));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -334,22 +334,41 @@ namespace projektni_zadatak_oop
         public int x { get; set; }
         public int y { get; set; } 
         public int health { get; set; }
+        public Rectangle bounds { get; set; }
 
-        public Enemy(int x, int y, int health)
+        public bool alive { get; set; }
+
+        public Enemy(int x, int y, int health, bool alive)
         {
             this.x = x;
             this.y = y;
             this.health = 1;
+            this.alive = alive; 
         }
+
+        public abstract void Set(int x, int y, int health, bool alive);
 
         public abstract void Move(int dx, int dy);
 
         public abstract void Draw(Graphics g);
+
+        public abstract void IsAlive();
     }
 
     public class EasyEnemy : Enemy
     {
-        public EasyEnemy(int x, int y, int health = 1) : base(x, y, health) { }
+        public EasyEnemy(int x, int y, int health = 1, bool alive = true) : base(x, y, health, alive) 
+        {
+            bounds = new Rectangle(x, y, 20, 20);
+        }
+
+        public override void Set(int x, int y, int health, bool alive)
+        {
+            this.x = x;
+            this.y = y;
+            this.health = health;
+            this.alive = alive;
+        }
 
         public override void Move(int dx, int dy)
         {
@@ -359,50 +378,58 @@ namespace projektni_zadatak_oop
 
         public override void Draw(Graphics g) 
         {
-            SolidBrush yBrush = new SolidBrush(Color.Yellow);
-            SolidBrush rBrush = new SolidBrush(Color.Red);
-            Point[] listOfPoints = new Point[]
+            if (alive) 
             {
-                new Point(x + 2, y - 4),
-                new Point(x + 2, y - 11),
-                new Point(x + 3, y - 11),
-                new Point(x + 3, y - 12),
-                new Point(x + 5, y - 12),
-                new Point(x + 5, y - 20),
-                new Point(x + 7, y - 20),
-                new Point(x + 7, y - 17),
-                new Point(x + 8, y - 17),
-                new Point(x + 8, y - 14),
-                new Point(x + 9, y - 14),
-                new Point(x + 9, y - 13),
-                new Point(x + 11, y - 13),
-                new Point(x + 11, y - 14),
-                new Point(x + 12, y - 14),
-                new Point(x + 12, y - 17),
-                new Point(x + 13, y - 17),
-                new Point(x + 13, y - 20),
-                new Point(x + 15, y - 20),
-                new Point(x + 15, y - 12),
-                new Point(x + 17, y - 12),
-                new Point(x + 17, y - 11),
-                new Point(x + 18, y - 11),
-                new Point(x + 18, y - 4),
-                new Point(x + 17, y - 4),
-                new Point(x + 17, y - 3),
-                new Point(x + 3, y - 3),
-                new Point(x + 3, y - 4)
-            };
+                SolidBrush yBrush = new SolidBrush(Color.Yellow);
+                SolidBrush rBrush = new SolidBrush(Color.Red);
+                Point[] listOfPoints = new Point[]
+                {
+                    new Point(x + 2, y - 4),
+                    new Point(x + 2, y - 11),
+                    new Point(x + 3, y - 11),
+                    new Point(x + 3, y - 12),
+                    new Point(x + 5, y - 12),
+                    new Point(x + 5, y - 20),
+                    new Point(x + 7, y - 20),
+                    new Point(x + 7, y - 17),
+                    new Point(x + 8, y - 17),
+                    new Point(x + 8, y - 14),
+                    new Point(x + 9, y - 14),
+                    new Point(x + 9, y - 13),
+                    new Point(x + 11, y - 13),
+                    new Point(x + 11, y - 14),
+                    new Point(x + 12, y - 14),
+                    new Point(x + 12, y - 17),
+                    new Point(x + 13, y - 17),
+                    new Point(x + 13, y - 20),
+                    new Point(x + 15, y - 20),
+                    new Point(x + 15, y - 12),
+                    new Point(x + 17, y - 12),
+                    new Point(x + 17, y - 11),
+                    new Point(x + 18, y - 11),
+                    new Point(x + 18, y - 4),
+                    new Point(x + 17, y - 4),
+                    new Point(x + 17, y - 3),
+                    new Point(x + 3, y - 3),
+                    new Point(x + 3, y - 4)
+                };
 
-            Point[] listOfPointsCockpit = new Point[]
-            {
+                Point[] listOfPointsCockpit = new Point[]
+                {
                 new Point(x + 4, y - 5),
                 new Point(x + 16, y - 5),
                 new Point(x + 16, y - 9),
                 new Point(x + 4, y - 9)
-            };
+                };
 
-            g.FillPolygon(yBrush, listOfPoints);
-            g.FillPolygon(rBrush, listOfPointsCockpit);
+                g.FillPolygon(yBrush, listOfPoints);
+                g.FillPolygon(rBrush, listOfPointsCockpit);
+            }
+        }
+
+        public override void IsAlive() 
+        {
+            if (health == 0) alive = false;
         }
     }
 }

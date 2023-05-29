@@ -64,8 +64,9 @@
             // 
             this.bStart.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bStart.AutoSize = true;
+            this.bStart.FlatAppearance.BorderSize = 0;
             this.bStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bStart.Font = new System.Drawing.Font("ProggyTinyTT", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.bStart.Font = new System.Drawing.Font("ProggyTinyTT", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.bStart.ForeColor = System.Drawing.Color.White;
             this.bStart.Location = new System.Drawing.Point(305, 616);
             this.bStart.Name = "bStart";
@@ -80,8 +81,9 @@
             // 
             this.bExit.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bExit.AutoSize = true;
+            this.bExit.FlatAppearance.BorderSize = 0;
             this.bExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bExit.Font = new System.Drawing.Font("ProggyTinyTT", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.bExit.Font = new System.Drawing.Font("ProggyTinyTT", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.bExit.ForeColor = System.Drawing.Color.White;
             this.bExit.Location = new System.Drawing.Point(305, 715);
             this.bExit.Name = "bExit";

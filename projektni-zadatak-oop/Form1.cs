@@ -64,6 +64,11 @@ namespace projektni_zadatak_oop
                     part.Move(r.Next(10, 20) * (-1), r.Next(10, 20));
                 }
             }
+
+            foreach (Particle part in bg.listOfParticles)
+            {
+                if (part.y < 0) { part.Set(r.Next(20, ClientRectangle.Width - 20), ClientRectangle.Height, part.size); }
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)

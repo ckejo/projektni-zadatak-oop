@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.tProjectileMover = new System.Windows.Forms.Timer(this.components);
             this.lbScoreTitle = new System.Windows.Forms.Label();
             this.lbScore = new System.Windows.Forms.Label();
@@ -58,9 +59,9 @@
             this.lbScore.ForeColor = System.Drawing.Color.White;
             this.lbScore.Location = new System.Drawing.Point(13, 36);
             this.lbScore.Name = "lbScore";
-            this.lbScore.Size = new System.Drawing.Size(113, 12);
+            this.lbScore.Size = new System.Drawing.Size(0, 12);
             this.lbScore.TabIndex = 1;
-            this.lbScore.Text = "000000000";
+            this.lbScore.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tEnemyMover
             // 
@@ -77,6 +78,7 @@
             this.Controls.Add(this.lbScore);
             this.Controls.Add(this.lbScoreTitle);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
             this.Text = "Galaxigan";
             this.Load += new System.EventHandler(this.Form2_Load);
